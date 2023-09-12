@@ -1,0 +1,53 @@
+{% extends "base-admin.html" %}
+{% block seccion %}
+ <ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'login' %}"></a>Usuarios</li>
+  <li class="breadcrumb-item active">Listar Usuarios</li>
+  
+</ol>{% endblock seccion %}
+{% block subseccion %}Listar Usuarios{% endblock subseccion %}
+{% block content %}
+
+
+<div class="panel-body">
+  <form name="formDelete" method="post">
+  {% csrf_token %}
+  <table id="example" class="table table-striped" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Cédula</th>
+                  <th class="min-tablet">Nombre del Usuario</th>
+                  <th class="min-tablet">Rol</th>
+                  <th class="min-tablet">Grupo</th>
+                  <th class="min-desktop">Editar / Activar</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for usuario in usuarios %}
+                  <tr>
+                      <td>{{ usuario.username}}</td>
+                      <td>{{ usuario.get_full_name}} </td>
+                      <td>{{ usuario.rol }}</td>
+                      <td>{{ usuario.Grupo }}</td>
+                      <td>
+                          <!--acciones - boton editar y eliminar-->
+                   
+                          <a id="{{ usuario.username}}" name="btnusuario"  data-toggle="tooltip" href="editar/{{usuario.username}}" data-original-title="Editar" data-container="body"><i class="btn btn-primary rounded-pill">Editar</i></a>
+                      </td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </form>
+  </div>
+
+    <script>
+      window.onload = function() {
+      llamarMensajes( '{{ llamarMensaje }}' , '{{ mensaje }}');
+  };
+  
+  </script>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  {% endblock content  %}

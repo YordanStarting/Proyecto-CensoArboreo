@@ -1,0 +1,70 @@
+{% extends "base-censista.html" %}
+{% block title %}Censista -{% endblock title  %}
+{% block content %}
+
+<form method="post">
+  {% csrf_token %}
+<div class="row">
+
+  <div class="col-lg-6">
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Formulario</h5>
+
+        <button type="submit" id="btnFormulario" name="btnFormulario" class="btn btn-success mb-2"> Ingresar  <span class="badge bg-white text-primary"></span> </button>
+      </div>
+    </div><!-- End Button Badges -->
+
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Usuarios</h5>
+
+<!--        <button type="button" class="btn btn-success mb-2" onsubmit="cambiar_contrasena">         </button> -->
+<a href="{% url 'cambiar_contrasena' %}" > <button type="button" id="btnFormulario" name="btnFormulario" class="btn btn-success mb-2"> Editar datos usuario y/o Cambiar Conttaseña  <span class="badge bg-white text-primary"></span> </button> </a>
+  <!--           <a href="{% url 'cambiar_contrasena' %}" class="btn btn-secondary btn-lg disabled" role="button"></a> Cambiar contraseña  <span class="badge bg-white text-primary"> </span> </a> -->
+
+   
+
+      </div>
+    </div><!-- End Button Badges -->
+
+ 
+  </div>
+
+  <div class="col-lg-6">
+
+    
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Reporte arbol</h5>
+
+      <a href="{% url 'listar_formularios_censista' %}" > <button type="button" id="listar_formulario" name="listar_formulario" class="btn btn-success mb-2"> Ver Formulario <span class="badge bg-white text-primary"></span> </button> </a>
+
+      </div>
+    </div><!-- End Button Badges -->
+
+
+  </div>
+  <!--Footer-->
+  <div style="position: relative; top: 300px; ">
+    <div class="card-footer text-center ">    
+      <div class="card-body">
+        <h5 class="card-title">Santiago de Cali, Colombia</h5>
+        <p class="card-text">Dirección: Carrera 26 #7-08 of. 204 Teléfono: +57 (318) 3983729
+          funaguacolombia.org
+          2022 - 2023</p>
+          <img src="static/img/footer.png" alt="">
+      </div>                 
+    </div>
+  </div>
+
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</form>
+{% endblock content  %}

@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title >Censo Arbóreo Santiago de Cali 2022</title>
+    <link rel="icon" type="image/x-icon" href="static/img/funa.ico">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <!-- Estilos -->
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/static/js/familia_genero.js"></script>
+    <!-- Final estilos -->
+
+    <!--Funcionalidad del mapa-->
+    <style type="text/css">
+        #divMap {
+            height: 400px;
+            width: 1200px;
+            border-radius: 15px;
+            margin: 50px auto;
+        }
+    </style>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8VDnPOhFpQiCLmBzHmi1byVuSoE2hcTs&callback=initMap&libraries=&v=weekly">
+    </script>
+    <script type="text/javascript">
+        var latitude1 = 0;
+        var longitude1 = 0;
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            latitude1 = position.coords.latitude;
+            longitude1 = position.coords.longitude;
+
+
+            console.log("latitude " + latitude1)
+            console.log("longitude " + longitude1)
+            document.getElementById("textLatitude").value  = latitude1;
+            document.getElementById("textLongitude").value = longitude1;
+
+            var mapProp = {
+                center: new google.maps.LatLng(latitude1, longitude1),
+                zoom: 20,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            // Agregando el mapa al tag de id divMap
+            var map = new google.maps.Map(document.getElementById("divMap"), mapProp);
+
+            // Creando un marker en el mapa
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latitude1, longitude1),
+                map: map,
+                title: 'Hello World!',
+                icon: image,
+                draggable: true //que el marcador se pueda arrastrar
+            });
+
+            // Registrando el evento drag, en este caso imprime
+            // en consola la latitud y longitud
+            google.maps.event.addListener(marker, 'drag', function (event) {
+                console.log(event.latLng.lat());
+                
+                document.getElementById("textLatitude").value  = event.latLng.lat();
+                document.getElementById("textLongitude").value = event.latLng.lng();
+            });
+        }
+
+
+
+        function initialize() {
+
+            getLocation()
+
+            console.log("latitude 2 " + latitude1)
+            console.log("longitude 2 " + longitude1)
+
+            //latitude1 = 3.419790480782989
+            //longitude1 = -76.53127670288087
+            // Configuración del mapa
+
+
+        }
+
+        // Inicializando el mapa cuando se carga la página
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <!-- Content Wrapper -->
+
+    <div id="content-wrapper" class="d-flex flex-column ">
+
+          <!-- Main Content -->
+          <div id="content">
+              <!-- Topbar -->
+              <header class="p-3 mb-3 border-bottom">
+                  <div class="container">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                        <img src="/static/img/funa.png" class="rounded mx-auto d-block bi me-2" width="40" height="32"  alt="">
+                      </a>
+              
+                      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        Censo Arbóreo Santiago de Cali 2022
+                      </ul>
+              
+              
+                      <div class="dropdown text-end">
+                        
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          {{ request.user.get_full_name }} <img src="{{ MEDIA_URL }}{{usuario.foto.url}}" alt="mdo" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small">
+                          <li><a class="dropdown-item" href="{% url 'login' %}">Dashboard</a></li>
+                          <li><a class="dropdown-item" href="{% url 'cambiar_contrasena' %}">Cambiar Contraseña</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url 'logout' %}">Salir</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </header>
+              <!-- End of Topbar -->
+
+              <!-- Tablas Ejempos -->
+              <!-- Container content-->
+              <main class="container-fluid">
+                  <!--Tamaño del formulario-->
+                  <div class="wrapper d-flex col-md-12 justify-content-center  rounded p-4 form">
+                      <!--Capa 2-->      
+                      <div class="grid-form col-12 col-md-8 col-sm-12 col-lg-12 pb-5 px-5 rounded rounded-lg shadow-lg  aling-items-center">
+                        <!--Logo-->
+                        <img src="/static/img/funa.png" class="rounded mx-auto d-block" style="max-width: 150px; max-height: 150px;">
+                          <!------------------------------------------------------------------------------------------------------------------------ ---
+                            /------------------------------------------------------------------------------------------------------------------------ ---
+                                                                    FORMULARIO 1 
+                            -------------------------------------------------------------------------------------------------------------------------- ---
+                            /------------------------------------------------------------------------------------------------------------------------ -->
+                            <form method="post" enctype="multipart/form-data" class="needs-validation">
+                              {% csrf_token %}
+                            <!-- FORMULARIO 1 -->
+                            <div  id="form1" style="display: block;" needs-validation>
+                              <div  class="row">
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                    <label for="validationCustom01">Placa Antigua:</label>
+                                    <input type="button" class="btn" id="popov" name="popov" onclick="alerts()" value="?">
+                                      
+                                  
+                                    <input type="number" id="PlacaAntigua" name="PlacaAntigua" class="form-control" disabled>
+                                    <div class="invalid-feedback" id="delet">
+                                      Ingresa como mínimo 1 digito
+                                    </div>
+                                    
+                                  </div>
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                    
+                                  </div>
+
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <div class="w-auto" id="divMap"></div>
+                                  </div>
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <div class="row">
+                                          <div class="col-md-12 text-center">
+                                              <h4 style="color: black;">Ubicación Geográfica:</h4>
+                                          </div>
+                                          <div class="col-md-6 text-center">
+                                              <label for="" class="text-center">Latitud (GD)</label>
+                                              <input  name="textLatitude" type="text" id="textLatitude" class="form-control text-center", placeholder="Esperando calcular latitud" readonly>
+                                          </div>
+                                          <div class="col-md-6 text-center">
+                                              <label for="" class="text-center">Longitud (GD)</label>
+                                              <input  name="textLongitude" type="text" id="textLongitude" class="form-control text-center", placeholder="Esperando calcular longitud" readonly>
+                                          </div>
+                                      </div>
+                                  </div>
+                              
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <div class="form-group d-flex flex-column mx-auto">
+                                          <label for="Dirección">Dirección:</label>
+                                          <input type="text" id="direccion" name="direccion" class="form-control" disabled>
+                                          <div class="valid-feedback" id="validaciondireccion">
+                                                Ingresar dirección válida
+                                          </div>
+                                      </div>  
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Nombre común</label>
+                                      <select name="nombre_comun"  onchange="asignar_nombre_comun()"  id="nombre_comun" class="form-control" disabled>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Nombre científico</label>
+                                      <input id="nombre_cientifico", name="nombre_cientifico" type="text" class="form-control" placeholder="" aria-label="Genero" disabled>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Familia</label>
+                                      <input id="familia", name="familia" type="text" class="form-control" placeholder="" aria-label="Genero" disabled>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Genero</label>
+                                      <input id="genero", name="genero" type="text" class="form-control" placeholder="" aria-label="Genero" disabled>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Estado de Madurez</label>
+                                      <select name="estado_madurez" id="estado_madurez" class="form-control" disabled>
+                                          <option value="Plantón">Plantón</option>
+                                          <option value="Juvenil">Juvenil</option>
+                                          <option value="Adulto">Adulto</option>
+                                          <option value="Longevo">Longevo</option>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <label for="">Estado del registro</label>
+                                      <select name="estado_registro" id="estado_registro" class="form-control" disabled>
+                                          <option value="Nuevo" >Nuevo</option>
+                                          <option value="Antiguo">Antiguo</option>
+                                          <option value="Revisión">Revisión</option>
+                                          <option value="Eliminado">Eliminado</option>
+                                      </select>
+                                  </div>
+                              </div>
+                            </div>
+                          
+                            <!--FORMULARIO 2-->
+                            <div id="form2" style="display: none;">
+                              <div  class="row">
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="Codigo QR">Digite el codigo QR:</label>
+                                      <input type="number" id="qr" name="qr" class="form-control" disabled>
+                                      <div class="invalid-feedback" id="delet">
+                                        Ingresa un número de QR Válido
+                                      </div>
+                                  </div>
+
+
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="P">Cobertura</label>
+                                      <select type="text" id="cobertura" name="cobertura" class="form-control" disabled>
+                                          <option selected value="Césped">Césped </option>
+                                          <option value="Jardín">Jardín</option>
+                                          <option value="Piso Duro">Piso Duro</option>
+                                          <option value="Vegetacion Ermegente">Vegetacion Ermegente</option>
+                                          <option value="Tierra descubierta/arena">Tierra descubierta/arena</option>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="emplazamiento">Emplazamiento</label>
+                                      <select type="text" id="emplazamiento" name="emplazamiento" class="form-control" disabled>
+                                        <option value="Andén" selected>Andén</option>
+                                        <option value="Bahía de estacionamiento">Bahía de estacionamiento</option>
+                                          <option value="Bulevares">Bulevares</option>
+                                          <option value="Corredor férreo">Corredor férreo</option>
+                                          <option value="Escenario deportivo y/o cultural">Escenario deportivo y/o cultural</option>
+                                          <option value="Glorieta">Glorieta</option>
+                                          <option value="Institución Educativa">Institución Educativa</option>
+                                          <option value="Parque Urbano">Parque Urbano</option>
+                                          <option value="Paseos">Paseos</option>
+                                          <option value="Plazas">Plazas</option>
+                                          <option value="Plazoleta">Plazoleta</option>  
+                                          <option value="Rondas de canales">Rondas de canales</option>
+                                          <option value="Rondas de ríos">Rondas de ríos</option>
+                                          <option value="Separador vial">Separador vial</option>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="confinamiento">Confinamiento</label>
+                                  </div>
+                                  
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <input onclick="formView()" type="radio" class="form-check-input" name="confinamiento" id="confinamiento-radio" value="1" disabled>
+                                      <label for="" >Si</label>
+                                
+                                      <input onclick="formNone()" type="radio" class="form-check-input" name="confinamiento" id="confinamiento-radio2" value="2" disabled>
+                                      <label for="">No</label>
+                                      
+                                  </div>
+
+                                  <div id="formView" style="display: none;" class="col-md-12 col-lg-12 mb-2">
+                                      <input placeholder="Distancia de Confinamiento (m)" name="dist_confinamiento" id="dist_confinamiento" type="number" class="form-control" disabled>
+                                      
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center">
+                                          <label for="avatar">
+                                              <div class="w-full h-48 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                                  <img class="w-full object-cover" src="https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png" height="96" id="img"/>
+                                              </div>                                          
+                                          </label>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                          <input type="file" class="form-control" placeholder="Primera foto" aria-label="First name" id="avatar" name="avatar" accept="image/*" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Debes ingresar una imagen
+                                          </div>
+                                      </div>
+
+          
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center">
+                                          <label for="avatar2">
+                                              <div class="w-full h-48 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                                  <img class="w-full object-cover" src="https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png" height="96" id="img"/>
+                                              </div>                                          
+                                          </label>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                          <input type="file" class="form-control" placeholder="Segunda name"    aria-label="First name" id="avatar2" name="avatar2"  accept="image/*" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Debes ingresar una imagen
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center">
+                                          <label for="avatar3">
+                                              <div class="w-full h-48 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                                  <img class="w-full object-cover" src="https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png" height="96" id="img"/>
+                                              </div>                                          
+                                          </label>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                          <input type="file" class="form-control" placeholder="Segunda Foto"
+                                          aria-label="Tercera Foto" id="avatar3" name="avatar3" accept="image/*" disabled>
+                                      </div>
+
+                                      
+                                  </div>
+                                  <div class="col-md-6 col-lg-6 mb-2">
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center">
+                                          <label for="avatar4">
+                                              <div class="w-full h-48 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                                  <img class="w-full object-cover" src="https://p.kindpng.com/picc/s/451-4517876_default-profile-hd-png-download.png" height="96" id="img"/>
+                                              </div>                                          
+                                          </label>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                          <input type="file" class="form-control" placeholder="Foto 4"
+                                          aria-label="Cuarta name" id="avatar4" name="avatar4" accept="image/*" disabled>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+
+                            <!--FORMULARIO 3-->
+                            <div id="form3" style="display: none;">
+                            
+                                  
+                                  <div class="row" id="form2">
+
+                                        <div class="col-md-12 col-lg-12 mb-2">
+                                          <label for="Placa Antigua">Forma del Tronco:</label>
+                                          <div class="form-check form-check-inline">
+                                            
+                                            <input class="form-check-input" type="radio" name="tipofuste" id="fuste_unico" value="Fuste Único" onclick="formFusteUnico() " disabled>
+                                            <label class="form-check-label" for="inlineRadio1">Fuste Único</label>
+                                          </div>
+
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="tipofuste" id="poli_polifurcado" value="Fuste Polifurcado" onclick="formFusteFolicurcado()" disabled>
+                                            <label class="form-check-label" for="inlineRadio2">Fuste Polifurcado</label>
+                                          </div>
+                                          
+                                      </div>
+
+                                      <div id="formViewUnico" style="display: none;" class="col-md-12 col-lg-12 mb-2" >
+                                        <label>CAP (cm)</label>
+                                        <input placeholder="capa (m)" name="cap" id="cap" type="number" class="form-control " value="" disabled>
+                                        <div class="invalid-feedback" id="delet">
+                                          Ingresa un número de CAP válido
+                                        </div>
+                                    </div>
+                                      
+
+                                  <div style="display: none;" class="col-md-12 col-lg-12 mb-2" id="formViewPolifurcado" name="formViewPolifurcado">
+                                    <div class="col-md-12 col-lg-12 mb-2">
+    
+                                      <label for="Tallos">No de Tallos</label>
+                                      <select  id="numero_tallos" name="numero_tallos" class="form-control " onchange="fuste_polifurcado();" disabled>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                      </select>
+                                        <div class="invalid-feedback" id="delet">
+                                        Ingresa un número de tallos válido
+                                      </div>  
+                                  </div>
+
+                                    <div class="col-md-12 col-lg-12 mb-2" id="fuste1" style="display: block;">
+                                      <label for="CAP 1">CAP 1(cm)</label>
+                                      <input type="number" id="capa1" name="capa1" placeholder=" Valor en cm" class="form-control " disabled>
+                                      <div class="invalid-feedback" id="delet">
+                                        Ingresa un número de CAP1 válido
+                                      </div>  
+                                  </div>
+
+                                      <div class="col-md-12 col-lg-12 mb-2" id="fuste2" style="display: none;">
+                                        <label for="Capa 2">CAP 2(cm)</label>
+                                        <input type="number" id="capa2" name="capa2" placeholder=" Valor en cm" class="form-control " disabled>
+                                        <div class="invalid-feedback" id="delet">
+                                          Ingresa un número de CAP2 válido
+                                        </div>  
+                                    </div>
+                                      <div class="col-md-12 col-lg-12 mb-2" id="fuste3" style="display: none;">
+                                        <label for="Capa 3">CAP 3(cm)</label>
+                                        <input type="text" id="capa3" name="capa3" placeholder=" Valor en cm"  class="form-control " disabled> 
+                                        <div class="invalid-feedback" id="delet">
+                                          Ingresa un número de CAP3 válido
+                                        </div> 
+                                    </div>
+                                      <div class="col-md-12 col-lg-12 mb-2" id="fuste4" style="display: none;">
+                                        <label for="Placa Antigua">CAP 4(cm)</label>
+                                        <input type="text" id="capa4" name="capa4" placeholder=" Valor en cm" class="form-control " disabled>
+                                        <div class="invalid-feedback" id="delet">
+                                          Ingresa un número de CAP4 válido
+                                        </div>  
+                                    </div>
+                                      <div class="col-md-12 col-lg-12 mb-2" id="fuste5" style="display: none;">
+                                        <label for="Placa Antigua">CAP 5(cm)</label>
+                                        <input type="text" id="capa5" name="capa5" placeholder=" Valor en cm" class="form-control " disabled>
+                                        <div class="invalid-feedback" id="delet">
+                                          Ingresa un número de CAP5 válido
+                                        </div>  
+                                    </div>
+
+                                    
+
+                                  </div> 
+
+
+                                    
+                                      <div class="col-md-12 col-lg-12 text-center py-3">
+                                          <h6 style="color: black;">Alturas (metros) :</h6>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">Comercial (Fuste)</label>
+                                          <input type="number" name="comercial_fuste" id="comercial_fuste" class="form-control"
+                                              placeholder="Hc (m)" disabled>
+                                              <div class="invalid-feedback" id="delet">
+                                                Ingresa un número válido de comercial fuste
+                                              </div>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">Total del árbol</label>
+                                          <input type="number" name="totalarbol" id="totalarbol" class="form-control " placeholder="Ht (m)" disabled> 
+                                              <div class="invalid-feedback" id="delet">
+                                                Ingresa un número válido de total fuste                                            
+                                              </div>
+                                      </div>
+    
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center py-3">
+                                          <h6 style="color: black;">Diámetro copa (metros) :</h6>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">Eje mayor</label>
+                                          <input type="number" name="ejemayor" id="ejemayor" class="form-control" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Ingresa un número
+                                          </div>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">Eje menor</label>
+                                          <input type="number" id="ejemenor" name="ejemenor"  class="form-control" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Ingresa un número
+                                          </div>
+                                      </div>
+
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                        <label for="Orientación">Orientación</label>
+                                        <select type="text" id="orientacion" name="orientacion" class="form-control" disabled>
+                                          <option value="Hacia la construcción" selected>Hacia la construcción</option>
+                                          <option value="Hacia la vía">Hacia la vía</option>
+                                          <option value="En dirección de la vía">En dirección de la vía</option>
+                                          <option value="Ninguna">Ninguna</option>
+                                          <option value="Otra">Otra</option>  
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="Placa Antigua">Inclinación</label>
+                                      <select type="text" id="inclinacion" name="inclinacion" class="form-control" disabled>
+                                        <option value="&lt;30" selected>&lt;30</option>
+                                        <option value="&gt;30">&gt;30</option>
+                                      </select>
+                                  </div>
+
+                                      <div class="col-md-12 col-lg-12 mb-2">
+                                          <label>Exposición de la copa a la luz</label>
+                                          <select type="number" id="exposicionluz" name="exposicionluz" class="form-control"
+                                              placeholder="CAP (m)" disabled>
+                                              <option value="No recibe luz">No recibe luz</option>
+                                              <option value="Una cara">Una cara</option>
+                                              <option value="Dos (2) caras">Dos (2) caras</option>
+                                              <option value="Tres (3) caras">Tres (3) caras</option>
+                                              <option value="Cuatro (4) caras">Cuatro (4) caras</option>
+                                              <option value="4 cara más superior">4 cara más superior</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2 text-center py-3">
+                                          <h6>Copa viva</h6>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">Altura (m)</label>
+                                          <input type="number" class="form-control" placeholder="ACV (m)" aria-label="Genero" id="copa_viva" name="copa_viva" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Ingresa un número
+                                          </div>
+                                      </div>
+                                      <div class="col-md-6 col-lg-6 mb-2">
+                                          <label for="">% copa ausente</label>
+                                          <input type="number" class="form-control" placeholder="(%)" aria-label="Genero" id="copa_ausente" name="copa_ausente" disabled>
+                                          <div class="invalid-feedback" id="delet">
+                                            Ingresa un número
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2 ">
+                                          <label for="Placa Antigua">Diámetro medio de ramas</label>
+                                          <select type="text" id="diametro" name="diametro" class="form-control" placeholder="CAP (m)" disabled>
+                                            <option value="&lt;0.05m"> &lt;0.05m </option>
+                                            <option value=">=0.05m"> &gt;=0.05m </option>
+                                          </select> 
+                                      </div>
+                                      <div class="col-md-12 col-lg-12 mb-2 ">
+                                          <label for="Sistema ">Sistema Radicular</label>
+                                          <select type="text" id="sistemaradicular" name="sistemaradicular" class="form-control" disabled>
+                                            <option value="Subtetrráneo" selected> Subterráneo </option>
+                                            <option value="Aéreo"> Aéreo </option>
+                                            <option value="Superficial"> Superficial </option>
+                                          </select>  
+                                      </div>
+                                  </div>
+                                
+                            </div>
+
+                            <!--FORMULARIO 4-->
+                            <div id="form4" style="display: none;">
+                              <div class="row">
+                                  <div class="col-md-12 col-lg-12 mb-2">
+                                      <label for="vitalidad" class="form-label">Vitalidad</label>
+                                      <select  name="vitalidad" id="vitalidad" onchange="ocultar();" class="form-control" disabled>
+                                        <option value="Buena" selected>Buena (Sano)</option>
+                                        <option value="Regular">Regular (Enfermo)</option>
+                                        <option value="Mala">Mala (Seco/Muerto)</option>
+                      
+                                      </select>
+                                  </div>
+
+                                <div id="ocultar" style="display: none;">
+                            
+                              
+
+                                  <div class="col-md-12 col-lg-12 mb-2 ">
+                                      <table class="table table-hover shadow ">
+                                          <thead class="table-success">
+                                            <tr>
+                                            
+                                              <th style="width: 90%;" class="text-center">Raices</th>
+                                              
+                                              <th class="text-center">NO/SI</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody class="">
+                                            <tr class="">
+                                              <th scope="row" class="">Heridas/Golpes</th>
+                                              <div class="" data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input class="form-check-input" type="checkbox" role="switch" id="mecanica_r_heridas" name="mecanica_r_heridas" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Quemaduras</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="mecanica_r_quemaduras" name="mecanica_r_quemaduras" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Necrosis</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="biologica_r_necrosis" name="biologica_r_necrosis" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Poda antitécnica</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input " type="checkbox" role="switch" id="antropica_r_poda" name="antropica_r_poda" >
+                                                    </div>b
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Productos tóxicos</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input " type="checkbox" role="switch" id="antropica_r_prd_toxicos" name="antropica_r_prd_toxicos" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Acumulación de escombros</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="antropica_r_escombro" name="antropica_r_escombro" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        <table class="table table-hover shadow ">
+                                          <thead class="table-success">
+                                            <tr>
+                                              <th style="width: 90%;" class="text-center">Fuste</th>
+                                              <th class="text-center">NO/SI</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody class="">
+                                            <tr class="">
+                                              <th scope="row" class="">Anillado</th>
+                                              <div class="" data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input class="form-check-input" type="checkbox" role="switch" id="mecanica_f_anillado" name="mecanica_f_anillado">
+                                                  </div>
+                                                </td>
+                                              </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Heridas/Golpes</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="mecanica_f_heridas"   name="mecanica_f_heridas">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Quemaduras</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="mecanica_f_quemaduras" name="mecanica_f_quemaduras">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Perforado / barrenado</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input " type="checkbox" role="switch" id="biologica_f_perfobarrenado" name="biologica_f_perfobarrenado" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Necrosis</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input " type="checkbox" role="switch" id="biologica_f_necrosis" name="biologica_f_necrosis">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Descortezado</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="biologica_f_descortezado" name="biologica_f_descortezado" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Tumor / agallas</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="biologica_f_tumores" name="biologica_f_tumores">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Poda antitécnica</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="antropica_f_poda" name="antropica_f_poda">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Acumulacuón escombros</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="antropica_f_escombros"  name="antropica_f_escombros">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Pintura</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="antropica_f_pintura"  name="antropica_f_pintura">
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </table>
+                                      <table class="table table-hover shadow ">
+                                        <thead class="table-success">
+                                          <tr>
+                                            <th style="width: 90%;" class="text-center">Copa (Follaje / Ramas)</th>
+                                            <th class="text-center">NO/SI</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class="">
+                                          <tr class="">
+                                            <th scope="row" class="">Heridas / Golpes</th>
+                                            <div class="" data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="mecanica_c_heridas" name="mecanica_c_heridas" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Quemaduras</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input class="form-check-input" type="checkbox" role="switch" id="mecanica_c_quemaduras" name="mecanica_c_quemaduras" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Defoliación</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input" type="checkbox" role="switch" id="biologica_c_defoliacion" name="biologica_c_defoliacion" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Clorosis</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input " type="checkbox" role="switch" id="biologica_c_clorosis" name="biologica_c_clorosis" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Minado / Enroscamiento</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input " type="checkbox" role="switch" id="biologica_c_minado" name="biologica_c_minado" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Necrosis ramas</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input" type="checkbox" role="switch" id="biologica_c_necrosis"name="biologica_c_necrosis" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Parasitas (ej. matapalo)s</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input" type="checkbox" role="switch" id="biologica_c_parasitas" name="biologica_c_parasitas" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Poda antitécnica</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input" type="checkbox" role="switch" id="antropica_c_poda" name="antropica_c_poda" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                          <tr class="">
+                                            <th scope="row" class="text-dark">Contaminación atmosférica</th>
+                                            <div class="btn-group " data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input  class="form-check-input" type="checkbox" role="switch" id="antropica_c_contamatmosferica" name="antropica_c_contamatmosferica">
+                                                  </div>
+                                                </td>
+                                              </div>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <table class="table table-hover shadow ">
+                                          <thead class="table-success">
+                                            <tr>
+                                              <th style="width: 90%;" class="text-center">Afectación Estado general</th>
+                                              <th class="text-center">NO/SI</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody class="">
+                                            <tr class="">
+                                              <th scope="row" class="">Raíces en buen estado</th>
+                                              <div class="" data-toggle="buttons">
+                                                <td class="">
+                                                  <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                      <input class="form-check-input" type="checkbox" role="switch" id="general_r_sano" name="general_r_sano" >
+                                                  </div>
+                                                </td>
+                                              </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Fuste Sano</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="general_f_sano" name="general_f_sano" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            <tr class="">
+                                              <th scope="row" class="text-dark">Copa (Follaje / ramas) Sana</th>
+                                              <div class="btn-group " data-toggle="buttons">
+                                                  <td class="">
+                                                    <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                        <input  class="form-check-input" type="checkbox" role="switch" id="general_c_sano" name="general_c_sano" >
+                                                    </div>
+                                                  </td>
+                                                </div>
+                                            </tr>
+                                            </tbody>
+                                            </table>
+                                            
+                                          </div>
+
+                                        </div>
+
+                                            <div  id="formvulnerab" style="display: block;">   
+                                            <table class="table table-hover shadow ">
+                                              <thead class="table-success">
+                                                <tr>
+                                                  <th style="width: 90%;" class="text-center">Vulnerabilidad</th>
+                                                  <th class="text-center">NO/SI</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody class="">
+                                                <tr class="">
+                                                  <th scope="row" class="">Personas / transito o flujo peatonal</th>
+                                                  <div class="" data-toggle="buttons">
+                                                    <td class="">
+                                                      <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                          <input class="form-check-input" type="checkbox" role="switch" name="personas" id="personas" placeholder="Transito o flujo peatonal" >
+                                                      </div>
+                                                    </td>
+                                                  </div>
+                                                </tr>
+                                                <tr class="">
+                                                  <th scope="row" class="text-dark">Vehículos / Transito o flujo vehicular</th>
+                                                  <div class="btn-group " data-toggle="buttons">
+                                                      <td class="">
+                                                        <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                            <input class="form-check-input" type="checkbox" role="switch" name="vehiculos" id="vehiculos"  placeholder="Transito o flujo vehicular" >
+                                                        </div>
+                                                      </td>
+                                                    </div>
+                                                </tr>
+                                                <tr class="">
+                                                  <th scope="row" class="text-dark">Construcciones / Existencia de construcciones afectables por caida de fuste o ramas</th>
+                                                  <div class="btn-group " data-toggle="buttons">
+                                                      <td class="">
+                                                        <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                            <input  class="form-check-input" type="checkbox" role="switch" name="construcciones" id="construcciones" placeholder="Existencia de construcciones afectables por caida de fuste o ramas" >
+                                                        </div>
+                                                      </td>
+                                                    </div>
+                                                </tr>
+                                                <tr class="">
+                                                  <th scope="row" class="text-dark">Redes aéreas / Existencia de redes aéreas afectables por desarrollo de copa o caida de fuste o ramas</th>
+                                                  <div class="btn-group " data-toggle="buttons">
+                                                      <td class="">
+                                                        <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                            <input  class="form-check-input " type="checkbox" role="switch" name="redes_aereas" id="redes_aereas"  placeholder="Existencoa" >
+                                                        </div>
+                                                      </td>
+                                                    </div>
+                                                </tr>
+                                              
+                                              </tbody>
+                                            </table>
+                                            </div>
+                              </div>
+                            </div>
+
+                            <div id="form5" style="display: none;" >
+
+                                <div class="col-md-12 col-lg-12 mb-2 " id="controlfitosanitario_div" style="display: block;">
+                                  <table class="table table-hover shadow ">
+                                      <thead class="table-success">
+                                        <tr>
+                                          <th style="width: 90%;" class="text-center">Intervención fitosanitaria</th>
+                                          <th class="text-center">NO/SI</th>
+                                        </tr>
+                                      </thead>
+                                      <tr class="">
+                                        <th scope="row" class="">Control Fitosanitario</th>
+                                        <div class="" data-toggle="buttons">
+                                          <td class="">
+                                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="controlfitosanitario" name="controlfitosanitario" >
+                                            </div>
+                                          </td>
+                                        </div>
+                                      </tr>
+                                      <div id="fitosanitario">
+                                      <tr class="">
+                                        <th scope="row" class="text-dark">Limpieza parásitas - LP</th>
+                                        <div class="btn-group " data-toggle="buttons">
+                                            <td class="">
+                                              <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                  <input  class="form-check-input" type="checkbox" role="switch" id="limpieza_parasistas" name="limpieza_parasistas" >
+                                              </div>
+                                            </td>
+                                          </div>
+                                      </tr>
+      
+                                      <tr class="">
+                                        <th scope="row" class="text-dark">Otros</th>
+                                        <div class="btn-group " data-toggle="buttons">
+                                            <td class="">
+                                              <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                  <input  class="form-check-input" type="checkbox" role="switch" id="otros_control_fitosanitario" name="otros_control_fitosanitario" >
+                                              </div>
+                                            </td>
+                                          </div>
+                                      </tr>
+                                    </div>
+                                      <tbody>
+                                      </tbody>
+                                  </table>
+                                  </div>
+                                <div class="col-md-12 col-lg-12 mb-2 " id="intervencion" style="display: block;">
+                                  <table class="table table-hover shadow ">
+                                      <thead class="table-success">
+                                        <tr>
+                                          <th style="width: 90%;" class="text-center">Recomendaciones de intervención</th>
+                                          <th class="text-center">NO/SI</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody class="">                 
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Erradicación o tala</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="erradicacion" name="erradicacion">
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda aclareo - PA</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_aclareo" name="poda_aclareo">
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                      
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda equilibrio - PE</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input " type="checkbox" role="switch" id="poda_equilibrio" name="poda_equilibrio" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda formación - PF</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input " type="checkbox" role="switch" id="poda_formacion" name="poda_formacion" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda limpieza - PL</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input " type="checkbox" role="switch" id="poda_limpieza" name="poda_limpieza" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda de realce - PRE</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input " type="checkbox" role="switch" id="poda_realce" name="poda_realce" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda de ramas laterales - PRL</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_ramas_laterales" name="poda_ramas_laterales" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda de ramas secas - PRS</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_ramas_secas" name="poda_ramas_secas" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda sanitaria - PS</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_sanitaria" name="poda_sanitaria" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Poda redes secundarias - PRS</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_redes_secundarias" name="poda_redes_secundarias">
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                      
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Reducción de altura - PRA</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_reduccion_altura" name="poda_reduccion_altura" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                    
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Despeje de redes - PCDR</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="poda_despeje_redes" name="poda_despeje_redes">
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Traslado / Transplante</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="transplante" name="transplante" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                        <tr class="">
+                                          <th scope="row" class="text-dark">Eliminar piso duro</th>
+                                          <div class="btn-group " data-toggle="buttons">
+                                              <td class="">
+                                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                    <input  class="form-check-input" type="checkbox" role="switch" id="eliminar_piso_duro" name="eliminar_piso_duro" >
+                                                </div>
+                                              </td>
+                                            </div>
+                                        </tr>
+                                    
+                                      </tbody>
+                                    </table>
+                                </div>
+
+                                
+                                <div class="col-md-12 col-lg-12 mb-2 "  id="talamuerto" style="display: none;">
+                                  <table class="table table-hover shadow ">
+                                      <thead class="table-success">
+                                        <tr>
+                                          <th style="width: 90%;" class="text-center">Recomendaciones de intervención</th>
+                                          <th class="text-center">NO/SI</th>
+                                        </tr>
+                                      </thead>
+                                      <tr class="">
+                                        <th scope="row" class="">Erradicación o tala</th>
+                                        <div class="" data-toggle="buttons">
+                                          <td class="">
+                                            <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                                <input class="form-check-input" disabled checked  type="checkbox" role="switch" id="erradicacion_tala_muerto" name="erradicacion_tala_muerto"  >
+                                            </div>
+                                          </td>
+                                        </div>
+                                      </tr>
+                                      
+                                
+                                      <tbody>
+      
+                                      </tbody>
+                                  </table>
+                                
+                                  
+                                  <div class="form-floating">
+                                    <h6>¿Porqué tala?</h6>
+                                  <textarea class="form-control"  placeholder="Leave a comment here" id="porquetala" name="porquetala" style="height: 100px"></textarea>
+                                </div>
+                                <div class="form-floating">
+                                  <h4>Comentarios en general</h4>
+                                  <textarea class="form-control" placeholder="Leave a comment here" id="comentarios_en_general" name="comentarios_en_general"  style="height: 100px" disabled></textarea>
+                                </div>       
+                            </div>     
+
+                        </div>
+                          
+                        <!-- BOTON 1-->
+                        <nav aria-label="Page navigation example" id="boton1" style="display: block;">
+                                  <ul class="pagination justify-content-center">
+                                      <li class="page-item disabled px-3"> 
+                                        <button class="btn btn-outline-secondary" disabled >Anterior</button>
+                                      </li>
+                                      <li class="page-item">
+                                          <button  id="submit" type="button" class="btn btn-outline-primary" onclick="formshidde() " >Siguiente</button>
+                                      </li>
+                                  </ul>
+                        </nav>
+
+                        <!-- BOTON 2-->
+                        <nav aria-label="Page navigation example" id="boton2" style="display: none;">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled px-3">
+                                      <button type="button" class="btn btn-outline-secondary" onclick="showanterior()" >Anterior</button>
+                                    </li>
+                                    <li class="page-item">
+                                        <button type="button" class="btn btn-outline-primary" onclick="formshidde2()" >Siguiente</button>
+                                    </li>
+                                </ul>
+                        </nav>
+
+                        <!-- BOTON 3-->
+                        <nav aria-label="Page navigation example" id="boton3" style="display: none;">
+                              <ul class="pagination justify-content-center">
+                                  <li class="page-item disabled px-3">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="show3()" >Anterior</button>
+                                  </li>
+                                  <li class="page-item">
+                                      <button type="button"  class="btn btn-outline-primary" onclick="formshidde3()" >Siguiente</button>
+                                  </li>
+                              </ul>
+                        </nav>
+
+                        <!-- BOTON 4-->
+                        <nav aria-label="Page navigation example" id="boton4" style="display: none;">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled px-3">
+                                  <button type="button"  class="btn btn-outline-secondary" onclick="boton4()" >Anterior</button>
+                                </li>
+                                <li class="page-item">
+                                    <button type="button"  class="btn btn-outline-primary" onclick="hidde4()" >Siguiente</button>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <!-- BOTON 5-->
+                        <nav aria-label="Page navigation example" id="boton5" style="display: none;">
+                          
+                          <ul class="pagination justify-content-center">
+                              <li class="page-item disabled px-3">
+                                <button type="button"   class="btn btn-outline-secondary" onclick="boton5()" >Anterior</button>
+                              </li>
+                              <li class="page-item">
+                              <button name="btnFinalizar" type="submit" class="finish btn btn-warning">Finalizar</button>
+                              </li>
+                              </ul>
+                        </nav>
+                      </form>
+                  </div>
+               
+              </main>
+         
+        </div>
+    
+      
+      <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+              <div class="copyright text-center my-auto">
+                  <img src="static/img/footer.png" alt="">
+                  <br>
+                  <span style="text-align: end;"> Santiago de Cali, Colombia
+                      Dirección: Carrera 26 #7-08 of. 204 Teléfono: +57 (318) 3983729
+                      funaguacolombia.org
+                      2022 - 2023
+                  </span>
+
+              </div>
+          </div>
+    </footer>
+
+    <!-- Script de imagenes -->
+    <script>
+        let avatarInput = document.getElementById('avatar');
+        let img = document.querySelector('label[for=avatar] img');
+
+        avatarInput.onchange = async (e) => {
+          
+          img.classList.add('preview');
+          img.src = URL.createObjectURL(e.target.files[0]);  
+          
+          await console.log(img.offsetHeight, img.offsetWidth)
+          
+        }
+
+        let avatarInput2 = document.getElementById('avatar2');
+        let img2 = document.querySelector('label[for=avatar2] img');
+
+        avatarInput2.onchange = async (e) => {
+          
+            img2.classList.add('preview');
+            img2.src = URL.createObjectURL(e.target.files[0]);  
+          
+          await console.log(img2.offsetHeight, img2.offsetWidth)
+          
+        }
+
+        let avatarInput3 = document.getElementById('avatar3');
+        let img3 = document.querySelector('label[for=avatar3] img');
+
+        avatarInput3.onchange = async (e) => {
+          
+            img3.classList.add('preview');
+            img3.src = URL.createObjectURL(e.target.files[0]);  
+          
+          await console.log(img3.offsetHeight, img3.offsetWidth)
+          
+        }
+
+        let avatarInput4 = document.getElementById('avatar4');
+        let img4 = document.querySelector('label[for=avatar4] img');
+
+        avatarInput4.onchange = async (e) => {
+          
+            img4.classList.add('preview');
+            img4.src = URL.createObjectURL(e.target.files[0]);  
+          
+          await console.log(img4.offsetHeight, img4.offsetWidth)
+          
+        }
+
+    
+        </script>
+    <!-- Sweetalerts 2-->
+    <script src="static/js/sweetalerts.js"> </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="static/js/js.js"></script>
+    <!-- Core plugin JavaScript-->
+    <!-- Custom scripts for all pages-->
+    <script src="static/js/sb-admin-2.min.js"></script>
+    <!--Alerts-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="static/js/llamarMensajes.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="static/js/datatables-demo.js"></script>
+
+</body>
+
+
+<script type="text/javascript">
+$(document).on('ready',function (){
+    
+    $.getJSON('/static/js/lista_familia_arboles.json', function(data) {
+        $.each(data, function(key, value) {
+            $("#nombre_comun").append('<option name="' + key + '">' + value + '</option>');
+        }); // close each()
+    }); // close getJSON()
+
+    $.getJSON('/static/js/lista_genero_arboles.json', function(json) { datos_json = json; });
+
+    // Valores iniciales-
+    // Familia
+    document.getElementById("familia").value=datos_json["Acacia rubinia"][0]
+
+    // Género
+    document.getElementById("genero").value=datos_json["Acacia rubinia"][1]
+
+    // Nombre Científico
+    document.getElementById("nombre_cientifico").value=datos_json["Acacia rubinia"][2]
+
+
+    llamarMensajes( '{{ llamarMensaje }}' , '{{ mensaje }}');
+    
+});
+</script>
+
+
+
+</html>

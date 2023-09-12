@@ -1,0 +1,257 @@
+{% extends "base-supervisor.html" %}
+{% block seccion %}Inicio{% endblock seccion %}
+{% block subseccion %}Dashboard{% endblock subseccion %}
+{% block content %}
+  <!-- Left side columns -->
+  <div class="row">
+
+    <div class="col-xxl-4 col-xl-12">
+
+      <div class="card info-card customers-card">
+
+       
+
+        <div class="card-body">
+          <h5 class="card-title">Censistas </h5>
+
+          <div class="d-flex align-items-center">
+            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-file-earmark-person"></i>
+            </div>
+            <div class="ps-3">
+              <h6>{{numero_censistas}}</h6>
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- End Customers Card -->
+        <!-- Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card sales-card">
+
+  
+
+            <div class="card-body">
+
+              <h5 class="card-title center" >Grupo</h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-people"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{usuario.Grupo}}</h6>
+    
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div><!-- End Sales Card -->
+
+        <!-- Revenue Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card revenue-card">
+
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Hoy</a></li>
+                <li><a class="dropdown-item" href="#">Semana</a></li>
+                <li><a class="dropdown-item" href="#">Mes</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Formularios <span>| Hoy</span></h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-ui-checks"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{numero_formularios}}</h6>
+       
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div><!-- End Revenue Card -->
+         <!-- Left side columns -->
+        <div class="col-lg-6">
+          <div class="row">
+
+          
+            
+
+            <!-- Reports -->
+            <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Por</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Semana</a></li>
+                    <li><a class="dropdown-item" href="#">Mes</a></li>
+
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title"># de Formularios <span>/Semana</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="reportsChart"></div>
+
+                  <script>
+                    
+    
+                  
+                  var series_dict =  JSON.parse('{{data|escapejs}}');
+
+
+                    document.addEventListener("DOMContentLoaded", () => {
+                     
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                        series: series_dict,
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        markers: {
+                          size: 4
+                        },
+                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                        fill: {
+                          type: "gradient",
+                          gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [0, 90, 100]
+                          }
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          curve: 'smooth',
+                          width: 2
+                        },
+                        xaxis: {
+                          type: 'date',
+                        //  categories: ["12/04/2023","13/04/2023", "14/04/2023", "15/04/2023", "16/04/2023", "17/04/2023", "18/04/2023" ]
+                         categories: JSON.parse('{{list_dates|escapejs}}')
+                        },
+                        tooltip: {
+                          x: {
+                            format: 'dd/MM/yy HH:mm'
+                          },
+                        }
+                      }).render();
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+              
+    
+          </div>
+        </div><!-- End Left side columns -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Bar CHart</h5>
+
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 600px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#barChart'), {
+                    type: 'bar',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                      datasets: [{
+                        label: 'Bar Chart',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+        </div>
+ 
+       
+
+            <!-- Customers Card -->
+    </div>
+    <div class="card-footer text-center ">    
+      <div class="card-body">
+        <h5 class="card-title">Santiago de Cali, Colombia</h5>
+        <p class="card-text">Dirección: Carrera 26 #7-08 of. 204 Teléfono: +57 (318) 3983729
+          funaguacolombia.org
+          2022 - 2023</p>
+          <img src="static/img/footer.png" alt="">
+      </div>                 
+    </div>
+  </div>
+
+
+  
+
+  </div>
+
+
+ {% endblock content %}

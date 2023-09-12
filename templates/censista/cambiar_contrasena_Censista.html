@@ -1,0 +1,279 @@
+{% extends "base-censista.html" %}
+
+
+{% block title %}Censista -{% endblock title  %}
+{% block content %}
+
+{% load static %}
+
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+              <img src="{{ MEDIA_URL }}{{usuario.foto.url}}"  alt="Profile" class="rounded-circle">
+              <h2>{{usuario.get_full_name}}</h2>
+              <h3>{{usuario.rol}}</h3>
+              
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  {%if pestana == "contrasena" or pestana == "editar_perfil" %}
+                  <button id="perfil_pestana" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-overview">Perfil</button>
+                  {%else%}
+                  <button id="perfil_pestana" class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Perfil</button>
+
+                  {%endif%}
+                  
+                
+                </li>
+
+                <li class="nav-item">
+                  {%if pestana == "editar_perfil" %}
+                  <button id="editar_perfil_pestana" class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-edit">Editar Perfil</button>
+                  {%else%}
+                  <button id="editar_perfil_pestana" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Editar Perfil</button>
+                  {%endif%}
+                </li>
+
+              
+                <li class="nav-item">
+                  {%if pestana == "contrasena" %}
+                  <button id="contrasena_pestana"    class="nav-link active"  data-bs-toggle="tab" data-bs-target="#profile-change-password">Cambiar Contraseña</button>
+                  {%else%}
+                  <button id="contrasena_pestana"    class="nav-link"  data-bs-toggle="tab" data-bs-target="#profile-change-password">Cambiar Contraseña</button>
+                  {%endif%}
+                </li>
+
+              </ul>
+              <div class="tab-content pt-2">
+                {%if pestana == "contrasena" or pestana == "editar_perfil" %}
+                <div class="tab-pane fade profile-overview" id="profile-overview">
+                {%else%}
+                <div class="tab-pane fade show active profile-overview"  id="profile-overview">
+
+                {%endif%}
+                   
+
+       
+                  
+                  <h5 class="card-title">Detalles del Perfil</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Nombre completo</div>
+                    <div class="col-lg-9 col-md-8">{{usuario.get_full_name}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Empresa</div>
+                    <div class="col-lg-9 col-md-8">Funagua</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Empleo</div>
+                    <div class="col-lg-9 col-md-8">{{usuario.rol}}</div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Dirección</div>
+                    <div class="col-lg-9 col-md-8">{{usuario.direccion}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Teléfono</div>
+                    <div class="col-lg-9 col-md-8">{{usuario.telefono}}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Correo</div>
+                    <div class="col-lg-9 col-md-8">{{usuario.email}}</div>
+                  </div>
+
+                </div>
+
+                {%if pestana == "editar_perfil" %}
+                <div class="tab-pane fade show active profile-edit"  id="profile-edit">
+
+                {%else%}
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                {%endif%}
+
+                  <!-- Profile Edit Form -->
+                  <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Imagen de perfil</label>
+
+                        
+                      <div class="col-md-6 col-lg-6 mb-2">
+                        <div class="col-md-12 col-lg-12 mb-2 text-center">
+                            <label for="imagenperfil">
+                                <div class="w-full h-48 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                    <img class="w-full object-cover" src="{{ MEDIA_URL }}{{usuario.foto.url}}" height="96" id="img"/>
+                                </div>                                          
+                            </label>
+                        </div>
+                        <div class="col-md-12 col-lg-12 mb-2">
+                            <input type="file" class="form-control" placeholder="Primera foto" aria-label="First name" id="imagenperfil" name="imagenperfil" accept="image/*">
+                            <div class="invalid-feedback" id="delet">
+                              Debes ingresar una imagen
+                            </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+
+
+                    <div class="row mb-3">
+                      <label for="nombre" class="col-md-4 col-lg-3 col-form-label">Nombre </label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="nombre" type="text" class="form-control" id="nombre" value="{{usuario.first_name}}"> 
+                      </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                      <label for="apellidos" class="col-md-4 col-lg-3 col-form-label">Apellidos </label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="apellidos" type="text" class="form-control" id="apellidos" value="{{usuario.last_name}}">
+                      </div>
+                    </div>                
+
+                    <div class="row mb-3">
+                      <label for="Job" class="col-md-4 col-lg-3 col-form-label">Empleo</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="job" type="text" class="form-control" disabled id="Job" value="{{usuario.rol}}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Address" class="col-md-4 col-lg-3 col-form-label">Dirección</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="address" type="text" class="form-control" id="Address" value="{{usuario.direccion}}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Teléfono</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="phone" type="text" class="form-control" id="Phone" value="{{usuario.telefono}}">
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="Email" class="col-md-4 col-lg-3 col-form-label">Correo</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="email" type="email" class="form-control" id="Email" value="{{usuario.email}}">
+                      </div>
+                    </div>
+
+                   
+                    <div class="text-center">
+                      <button type="submit" name="btnCambiarPerfil" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                  </form><!-- End Profile Edit Form -->
+
+                </div>
+
+                {%if pestana == "contrasena" %}
+                <div class="tab-pane fade show active profile-change-password"  id="profile-change-password">
+
+                {%else%}
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                {%endif%}
+          
+                  <!-- Change Password Form -->
+                  <form id="formulariocontrasena" class="form" method="post" name="contrasena_form" onsubmit="return validatePassword('{{usuario.password}}')">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña Actual</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="currentPassword" type="password" class="form-control" id="currentPassword" required>
+                     
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nueva Contraseña</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="newPassword" type="password" class="form-control"  onkeyup="deleteInValidContrasena()" id="newPassword" required>
+                        <div class="invalid-feedback" id="delet">
+                           Los password No coinciden
+                         </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label"> Repita Nueva Contraseña</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="renewPassword" type="password" class="form-control"  onkeyup="deleteInValidContrasena()" id="renewPassword" required>
+                        <div class="invalid-feedback" id="delet">
+                          Los password No coinciden
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" name="btnCambiarContrasena" class="btn btn-primary"> Cambiar contraseña</button>
+                    </div>
+                  </form><!-- End Change Password Form -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <script>
+      window.onload = function() {
+      llamarMensajes( '{{ llamarMensaje }}' , '{{ mensaje }}');
+  };
+  
+  </script>
+  <script src="{% static '/js/js.js' %}"></script>
+  <script src="{% static '/js/llamarMensajes.js' %}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <script>
+let avatarInput = document.getElementById('imagenperfil');
+  let img = document.querySelector('label[for=imagenperfil] img');
+
+  avatarInput.onchange = async (e) => {
+    
+    img.classList.add('preview');
+    img.src = URL.createObjectURL(e.target.files[0]);  
+    
+    await console.log(img.offsetHeight, img.offsetWidth)
+    
+  }
+
+
+
+  </script>
+
+<script id="hello-data" type="application/json">{"password": "{{usuario.password}}"}</script>
+
+
+<script type="text/javascript"> 
+
+</script>
+
+  {% endblock content  %}

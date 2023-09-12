@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="static/css/login.css">
+</head>
+{% load static %}
+
+<body>
+    <script src="https://kit.fontawesome.com/ab00d86059.js" crossorigin="anonymous"></script>
+      <img class="wave" src="https://raw.githubusercontent.com/Jhonierpc/WebDevelopment/master/Login%20Responsive/img/wave.png" alt="">
+      <div class="container">
+          <div class="img">
+             <img src="static/img/funa.png" alt="">
+          </div>
+          <div class="login-container">
+              <form method="post">
+                {% csrf_token %}
+                  <h2>Registrarse</h2>
+
+                  <div class="input-div one">
+                      <div class="i">
+                          <i class="fas fa-user"></i>
+                      </div>
+                      <div>
+                          <h5>Ingresar Cédula</h5>
+                          {{form.usuario}}
+                      </div>
+                  </div>
+                  <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Nombres</h5>
+                    {{form.nombres}}
+                    </div>
+                </div>
+                                    
+                  <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Apellidos</h5>
+                    {{form.apellidos}}
+                    </div>
+                </div>
+                
+
+                  <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5>Ingresar Correo</h5>
+                    {{form.correo}}
+                    </div>
+                </div>
+                  <div class="input-div two">
+                      <div class="i">
+                          <i class="fas fa-lock"></i>
+                      </div>
+
+                      <div>
+                        <h5>Contraseña</h5>
+                        {{form.password}}
+                    </div>
+                  </div>
+                  <div class="input-div two">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+
+                    <div>
+                      <h5>Confirmar Contraseña</h5>
+                      {{form.password_confirmar}}
+                  </div>
+                </div>
+                 
+                  <input class="btn" name="btncreate" type="submit" value="Ingresar">
+
+                  <div class="col-12">
+                    <p class="small mb-0">¿Tiene cuenta en el sistema? <a href="{% url 'login' %}">Login</a></p>
+                  </div>
+              </form>
+          </div>
+      </div>
+      
+  </body>
+<script src="static/js/login.js"></script>
+
+
+<script>
+    window.onload = function() {
+    llamarMensajes( '{{ llamarMensaje }}' , '{{ mensaje }}');
+};
+ 
+
+</script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="{% static 'js/llamarMensajes.js' %}"></script>
+
+<script type="text/javascript" src="static/js/main.js"></script>
+</html>
